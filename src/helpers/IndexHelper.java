@@ -35,7 +35,9 @@ public class IndexHelper {
 				userID = rs.getInt(1);
 				role = rs.getString(3);
 				session.setAttribute("name", name);
+				session.setAttribute("uid", userID);
 				session.setAttribute("role", role);
+				session.setAttribute("cart", new ShoppingCart());
 				t++;
 			}
 			if (t == 0) {

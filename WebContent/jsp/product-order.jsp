@@ -38,12 +38,12 @@
                             </div>
                             <div class="col-md-9">
                                 <div class="page-header">
-                                    <h3>Checkout</h3>
+                                    <h3>Add to cart</h3>
                                 </div>
                                 <%
                                     if (nameNotNull) {
                                 %>
-                                <jsp:include page="/jsp/checkout.jsp" />
+                                <jsp:include page="/jsp/add.jsp" />
                                 <%
                                     } else {
                                 %>

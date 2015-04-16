@@ -17,13 +17,21 @@
         <servlet-name>products</servlet-name>
         <jsp-file>/jsp/products.jsp</jsp-file>
     </servlet>
-     <servlet>
+    <servlet>
         <servlet-name>purchase</servlet-name>
         <jsp-file>/jsp/purchase.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>browse</servlet-name>
         <jsp-file>/jsp/browsing.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>product-order</servlet-name>
+        <jsp-file>/jsp/product-order.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>confirm</servlet-name>
+        <jsp-file>/jsp/confirmation.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>signup</servlet-name>
@@ -48,5 +56,13 @@
     <servlet-mapping>
         <servlet-name>browse</servlet-name>
         <url-pattern>/browse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>product-order</servlet-name>
+        <url-pattern>/product-order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>confirm</servlet-name>
+        <url-pattern>/confirm</url-pattern>
     </servlet-mapping>
 </web-app>

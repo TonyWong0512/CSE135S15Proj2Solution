@@ -40,9 +40,14 @@ don't want to. -->
             <td><%=p.getCategoryName()%></td>
             <td><%=p.getPrice()%></td>
             <td>
-                <form action="browsing" method="post">
-                    <input type="text" name="action" id="action" value="delete" style="display: none"> <input type="text"
-                        name="id" id="id" value="<%=p.getId()%>" style="display: none"> <input type="submit" value="Purchase">
+                <form action="product-order" method="post">
+                    <input type="text" name="action" id="action" value="delete" style="display: none">
+                    <input type="text" name="id" id="id" value="<%=p.getId()%>" style="display: none">
+                    <input type="text" name="name" id="name" value="<%=p.getName()%>" style="display: none">
+                    <input type="text" name="cname" id="cname" value="<%=p.getCategoryName()%>" style="display: none">
+                    <input type="text" name="sku" id="sku" value="<%=p.getSKU()%>" style="display: none">
+                    <input type="text" name="price" id="price" value="<%=p.getPrice()%>" style="display: none">
+                        <input type="submit" value="Add to shopping cart">
                 </form>
             </td>
         </tr>
