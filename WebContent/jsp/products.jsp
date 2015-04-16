@@ -25,7 +25,9 @@
                                 	if (roleIsOwner) {
                                 %>
                                 <jsp:include page="/jsp/owner-menu.jsp" />
-                                <jsp:include page="/jsp/sidebar-categories.jsp" />
+                                <jsp:include page="/jsp/sidebar-categories.jsp">
+                                    <jsp:param value="products" name="actionName" />
+                                </jsp:include>
                                 <%
                                 	} else {
                                 %>
