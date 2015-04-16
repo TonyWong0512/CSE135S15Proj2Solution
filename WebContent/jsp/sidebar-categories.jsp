@@ -13,8 +13,9 @@
                 	for (CategoryWithCount cwc : categories) {
                 %>
                 <li>
-                    <form action="categories" method="post">
-                        <input type="text" name="name" id="name" value="<%=cwc.getName()%>" style="display: none"> <input
+                    <form action="products" method="post">
+                    <input type="text" name="search" id="search" value="<%=request.getParameter("search")%>" style="display: none">
+                        <input type="text" name="category" id="category" value="<%=cwc.getId()%>" style="display: none"> <input
                             type="submit" value="<%=cwc.getName()%>">
                     </form>
                 </li>

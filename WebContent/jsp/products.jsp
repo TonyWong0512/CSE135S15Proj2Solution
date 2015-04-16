@@ -4,8 +4,10 @@
 <jsp:include page="/html/head.html" />
 </head>
 <%
-   boolean nameNotNull = session.getAttribute("name") != null;
-   boolean roleIsOwner = ((String) session.getAttribute("role")).equalsIgnoreCase("owner");
+	boolean nameNotNull = session.getAttribute("name") != null;
+	String role = (String) session.getAttribute("role");
+	boolean roleIsOwner = (role != null) ? role
+			.equalsIgnoreCase("owner") : false;
 %>
 <body class="page-index" data-spy="scroll" data-offset="60" data-target="#toc-scroll-target">
     <jsp:include page="/jsp/header.jsp" />
@@ -17,35 +19,41 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <%
-                                    if (nameNotNull) {
+                                	if (nameNotNull) {
                                 %>
                                 <%
-                                    if (roleIsOwner) {
+                                	if (roleIsOwner) {
                                 %>
                                 <jsp:include page="/jsp/owner-menu.jsp" />
                                 <jsp:include page="/jsp/sidebar-categories.jsp" />
                                 <%
-                                    } else {
+                                	} else {
                                 %>
                                 <jsp:include page="/jsp/customer-menu.jsp" />
                                 <%
-                                    }
+                                	}
                                 %>
                                 <%
-                                    } 
+                                	}
                                 %>
                             </div>
                             <div class="col-md-9">
                                 <div class="page-header">
                                     <h3>Products</h3>
                                 </div>
-                                <% if (nameNotNull && roleIsOwner) { %>
-                                <jsp:include page="/jsp/list-products.jsp"/>
-                                <% } else { %>
+                                <%
+                                	if (nameNotNull && roleIsOwner) {
+                                %>
+                                <jsp:include page="/jsp/list-products.jsp" />
+                                <%
+                                	} else {
+                                %>
                                 <div class="alert alert-info">
                                     You need to be logged as an owner to see this page. Want to <a href="login">login</a>?
                                 </div>
-                                <% } %>
+                                <%
+                                	}
+                                %>
                             </div>
                         </div>
                         <jsp:include page="/html/footer.html" />
