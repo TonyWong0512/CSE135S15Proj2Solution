@@ -1,11 +1,13 @@
-
-    <div class="row">
+<div class="panel panel-default">
+    <div class="panel-body">
+        Menu :
         <div class="span9 bottom-nav">
             <ul class="nav nav-list">
-                <li class="active"><a href="browse" title="Home">Product Browsing</a></li>
-                <li><a href="purchase" title="BNF">Buy Shopping Cart</a></li>
-                <li><a href="login" title="BNF">Login</a></li>
-                <li><a href="signup" title="BNF">Sign Up</a></li>
+                <li class="active"><a href="browse" title="Browsing">Product Browsing</a></li>
+                <li><a href="purchase" title="Purchase">Buy Shopping Cart</a></li>
+                <li><a href="login" title="Login">Login</a></li>
+                <li><a href="signup" title="Signup">Sign Up</a></li>
             </ul>
         </div>
     </div>
+</div>

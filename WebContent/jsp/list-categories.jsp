@@ -1,3 +1,7 @@
+<!-- You will see on this form a CSS construct called a modal. Don't let
+this scare you, this is just some pretty presentation. They allow you to create
+boxes that appear when clicking on a button. You do not have to use them if you
+don't want to. -->
 <%@page import="java.util.List" import="helpers.*"%>
 <%=CategoriesHelper.modifyCategories(request)%>
 <%
@@ -21,9 +25,9 @@
             <td><%=cwc.getName()%></td>
             <td><%=cwc.getDescription()%></td>
             <td>
-                <!-- Delete Category Form --> <%
+                 <%
  	if (cwc.getCount() == 0) {
- %>
+ %>             <!-- Delete Category Form -->
                 <form action="categories" method="post">
                     <input type="text" name="action" id="action" value="delete" style="display: none"> <input type="text"
                         name="id" id="id" value="<%=cwc.getId()%>" style="display: none"> <input type="submit"
@@ -33,7 +37,7 @@
  %>
                 <button data-toggle="modal" data-target="#category-<%=cwc.getId()%>">Update</button>
             </td>
-            <!-- Update Category Form -->
+            
             <div class="modal fade" id="category-<%=cwc.getId()%>" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -44,6 +48,8 @@
                             <h4 class="modal-title" id="myModalLabel">Update Category</h4>
                         </div>
                         <div class="modal-body">
+                        
+                            <!-- Update Category Form -->
                             <form action="categories" method="post">
                                 <div>
                                     Name : <input type="text" name="name" id="name" value="<%=cwc.getName()%>" size="40">
@@ -56,6 +62,8 @@
                                     type="text" name="action" id="action" value="update" style="display: none"> <input
                                     type="submit" value="Update">
                             </form>
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -68,8 +76,9 @@
 </table>
 <div class="panel panel-default">
     <div class="panel-body">
-        <!-- Insert New Category Form -->
+        
         <button data-toggle="modal" data-target="#newCategory">Insert</button>
+        
         <div class="modal fade" id="newCategory" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -80,6 +89,9 @@
                         <h4 class="modal-title" id="myModalLabel">New Category</h4>
                     </div>
                     <div class="modal-body">
+                    
+                    
+                        <!-- Insert New Category Form -->
                         <form action="categories" method="post">
                             <div>
                                 Name : <input type="text" name="name" id="name" value="" size="40">
@@ -91,6 +103,9 @@
                             <input type="text" name="action" id="action" value="insert" style="display: none"> <input
                                 type="submit" value="Insert">
                         </form>
+                        
+                        
+                        
                     </div>
                 </div>
             </div>
