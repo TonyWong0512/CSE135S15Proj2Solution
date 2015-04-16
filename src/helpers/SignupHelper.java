@@ -32,11 +32,11 @@ public class SignupHelper {
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
 				return HelperUtils
-						.printError("Fail, can not access the database, please check the database status first! Please <a href='signup.jsp' target='_self'>register</a> again.");
+						.printError(e.getLocalizedMessage());
 			}
 			conn.close();
 		} catch (Exception e) {
-			String output = "Error.<br><a href=\"login.jsp\" target=\"_self\"><i>Go Back to Home Page.</i></a>";
+			String output = "A problem happened while interacting with the database : \n" + e.getLocalizedMessage();
 			return HelperUtils.printError(output);
 		}
 		String output = "<h4>Registered successfully!</h4> <br>";

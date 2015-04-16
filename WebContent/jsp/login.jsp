@@ -11,7 +11,7 @@
                 <div class="body-content">
                     <div class="section">
                         <div class="page-header">
-                            <h2 id="CSE135S15">CSE 135 Project</h2>
+                            <h4>Log In</h4>
                         </div>
                         <div class="row">
                             <jsp:include page="/html/login-form.html" />

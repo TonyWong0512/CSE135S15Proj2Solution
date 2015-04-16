@@ -12,7 +12,7 @@
                 <div class="body-content">
                     <div class="section">
                         <div class="page-header">
-                            <h2 id="CSE135S15">CSE 135 Project</h2>
+                            <h4>Sign Up</h4>
                         </div>
                         <div class="row">
                             <%

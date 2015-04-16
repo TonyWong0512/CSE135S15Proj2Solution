@@ -1,26 +1,31 @@
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-default">
     <div class="navbar-inner">
         <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target="#top-nav-collapse"> <span class="icon-bar"></span> <span
-                class="icon-bar"></span> <span class="icon-bar"></span>
-            </a>
-            <%
-            	if (session.getAttribute("name") != null) {
-            %>
-            <h2>
-                Hello
-                <%
-            	session.getAttribute("name");
-            %>
-            </h2>
-            <%
-            	}
-            %>
+            <div class="row">
+                <div class="span12">
+                    <p class="nav pull-right">
+                        <%
+                        	if (session.getAttribute("name") != null) {
+                        %>
+                        <b> Hello <%
+                        	out.println(session.getAttribute("name"));
+                        %> <%
+ 	if (((String) session.getAttribute("role"))
+ 				.equalsIgnoreCase("customer")) {
+ %> &nbsp | &nbsp
+                        </b> <a href="purchase">Buy Shopping Cart</a>
+                        <%
+                        	}
+                        %>
+                        <%
+                        	}
+                        %>
+                    </p>
+
+                    <h2>CSE 135 Project</h2>
+                </div>
+            </div>
             <!--/.nav-collapse -->
         </div>
-    </div>
-    <div class="nav-collapse collapse" id="top-nav-collapse">
-        <ul class="nav pull-right">
-        </ul>
     </div>
 </div>
