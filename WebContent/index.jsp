@@ -46,7 +46,7 @@
                             	} else {
                             %>
                             <div class="alert alert-info">
-                                You need to be logged into see this page. Want to <a href="login">login</a>?
+                                You need to be logged into see this page. Want to <a href="login">login</a> or <a href="signup">signup</a>?
                             </div>
                             <%
                             	}

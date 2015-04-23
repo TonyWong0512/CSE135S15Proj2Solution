@@ -13,9 +13,9 @@ int sum = 0;
 <table class="table table-striped" align="center">
     <thead>
         <tr align="center">
-            <th width="16%"><B>Product Name</B></th>
-            <th width="16%"><B>SKU</B></th>
             <th width="16%"><B>Category Name</B></th>
+            <th width="16%"><B>SKU</B></th>
+            <th width="16%"><B>Product Name</B></th>
             <th width="16%"><B>Price Per Unit</B></th>
             <th width="16%"><B>Quantity</B></th>
             <th width="16%"><B>Total Price</B></th>
