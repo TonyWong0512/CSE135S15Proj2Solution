@@ -70,6 +70,7 @@ don't want to. -->
                         name="search"
                         id="search"
                         value="<%=search%>"
+                        style="display:none;"
                         size="40" /> <input
                         type="text"
                         name="action"
