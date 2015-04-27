@@ -2,7 +2,7 @@
 this scare you, this is just some pretty presentation. They allow you to create
 boxes that appear when clicking on a button. You do not have to use them if you
 don't want to. -->
-<%@page import="java.util.List" import="helpers.*"%>
+<%@page import="java.util.List" import="helpers.*" import="models.*" %>
 <%=ProductsHelper.modifyProducts(request)%>
 <form action="browse">
     <%

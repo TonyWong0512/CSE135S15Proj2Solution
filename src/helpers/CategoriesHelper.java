@@ -9,32 +9,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import models.CategoryWithCount;
+
 public class CategoriesHelper {
 
     public static List<CategoryWithCount> listCategories() {
-        List<CategoryWithCount> categories = new ArrayList<CategoryWithCount>();
         try {
-            try {
-                Class.forName("org.postgresql.Driver");
-            } catch (Exception e) {
-                System.err.println("Internal Server Error. This shouldn't happen.");
-                return new ArrayList<CategoryWithCount>();
-            }
-            String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-            String user = "postgres";
-            String password = "postgres";
-            Connection conn = DriverManager.getConnection(url, user, password);
-            Statement stmt = conn.createStatement();
-            String query = "SELECT c.id, c.name, c.description, COUNT(p.id) as count FROM Categories c LEFT OUTER JOIN Products p ON c.id=p.cid GROUP BY c.id, c.name, c.description";
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                Integer id = rs.getInt(1);
-                String name = rs.getString(2);
-                String description = rs.getString(3);
-                Integer count = rs.getInt(4);
-                categories.add(new CategoryWithCount(id, name, description, count));
-            }
-            return categories;
+            return CategoryWithCount.getCategoriesWithCount();
         } catch (Exception e) {
             System.err.println("Some error happened!<br/>" + e.getLocalizedMessage());
             return new ArrayList<CategoryWithCount>();

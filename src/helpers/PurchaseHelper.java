@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
+import models.ProductWithCategoryName;
+
 public class PurchaseHelper {
 	
 	public static String purchaseCart(ShoppingCart cart, Integer uid) {

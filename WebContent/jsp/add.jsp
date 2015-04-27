@@ -1,4 +1,4 @@
-<%@page import="java.util.List" import="helpers.*"%>
+<%@page import="java.util.List" import="helpers.*" import="models.*" %>
 <%
 	ShoppingCart cart = PurchaseHelper.obtainCartFromSession(session);
 	boolean validRequest = true;

@@ -1,6 +1,6 @@
 <%@page
     import="java.util.List"
-    import="helpers.*"%>
+    import="helpers.*" import="models.*" %>
 <%
 	List<CategoryWithCount> categories = CategoriesHelper
 			.listCategories();

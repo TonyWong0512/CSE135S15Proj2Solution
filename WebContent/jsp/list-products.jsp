@@ -4,7 +4,7 @@ boxes that appear when clicking on a button. You do not have to use them if you
 don't want to. -->
 <%@page
     import="java.util.List"
-    import="helpers.*"%>
+    import="helpers.*" import="models.*" %>
 <%=ProductsHelper.modifyProducts(request)%>
 <form action="products">
     <%
@@ -70,8 +70,7 @@ don't want to. -->
                         name="search"
                         id="search"
                         value="<%=search%>"
-                        style="display:none;"
-                        size="40" /> <input
+                        style="display:none;"/> <input
                         type="text"
                         name="action"
                         id="action"
