@@ -25,6 +25,7 @@
                                     if (roleIsOwner) {
                                 %>
                                 <jsp:include page="/jsp/owner-menu.jsp" />
+                                <jsp:include page="/jsp/sidebar-analytics.jsp" />
                                 <%
                                     } else {
                                 %>

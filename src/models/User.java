@@ -3,14 +3,6 @@
  */
 package models;
 
-import helpers.AnalyticsHelper.Order;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 
 /**
  * @author julestestard
@@ -116,30 +108,30 @@ public class User {
         this.stateId = stateId;
     }
 
-    public static ArrayList<User> getUsersByOrder(Order o) throws SQLException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (Exception e) {
-            System.err.println("Internal Server Error. This shouldn't happen.");
-            return new ArrayList<User>();
-        }
-        ArrayList<User> users = new ArrayList<User>();
-        String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-        String user = "postgres";
-        String password = "postgres";
-        Connection conn = DriverManager.getConnection(url, user, password);
-        Statement stmt = conn.createStatement();
-        String query = "SELECT * FROM users ORDER BY name LIMIT 20";
-        ResultSet rs = stmt.executeQuery(query);
-        while (rs.next()) {
-            Integer id = rs.getInt(1);
-            String name = rs.getString(2);
-            String role = rs.getString(3);
-            Integer age = rs.getInt(4);
-            Integer state = rs.getInt(5);
-            users.add(new User(id, name, role, age, state));
-        }
-        return users;
-    }
+    //    public static ArrayList<User> getUsersByOrder(Order o) throws SQLException {
+    //        try {
+    //            Class.forName("org.postgresql.Driver");
+    //        } catch (Exception e) {
+    //            System.err.println("Internal Server Error. This shouldn't happen.");
+    //            return new ArrayList<User>();
+    //        }
+    //        ArrayList<User> users = new ArrayList<User>();
+    //        String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
+    //        String user = "postgres";
+    //        String password = "postgres";
+    //        Connection conn = DriverManager.getConnection(url, user, password);
+    //        Statement stmt = conn.createStatement();
+    //        String query = "SELECT * FROM users ORDER BY name LIMIT 20";
+    //        ResultSet rs = stmt.executeQuery(query);
+    //        while (rs.next()) {
+    //            Integer id = rs.getInt(1);
+    //            String name = rs.getString(2);
+    //            String role = rs.getString(3);
+    //            Integer age = rs.getInt(4);
+    //            Integer state = rs.getInt(5);
+    //            users.add(new User(id, name, role, age, state));
+    //        }
+    //        return users;
+    //    }
 
 }

@@ -23,6 +23,15 @@ public class CategoriesHelper {
         }
     }
 
+    public static List<CategoryWithCount> listCategoriesNoCount() {
+        try {
+            return CategoryWithCount.getCategories();
+        } catch (Exception e) {
+            System.err.println("Some error happened!<br/>" + e.getLocalizedMessage());
+            return new ArrayList<CategoryWithCount>();
+        }
+    }
+
     public static String modifyCategories(HttpServletRequest request) {
         Connection conn = null;
         Statement stmt = null;
