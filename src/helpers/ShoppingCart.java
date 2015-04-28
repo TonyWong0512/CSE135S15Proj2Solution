@@ -16,20 +16,20 @@ public class ShoppingCart {
 	
 	private List<Integer> quantities;
 	
-	private List<ProductWithCategoryName> products;
+	private List<ProductWithCategoryName> productWithCategoryNames;
 	
 	public ShoppingCart() {
-		this.products = new ArrayList<ProductWithCategoryName>();
+		this.productWithCategoryNames = new ArrayList<ProductWithCategoryName>();
 		this.quantities = new ArrayList<Integer>();
 	}
 	
 	public void addToShoppingCart(int quantity, ProductWithCategoryName p) {
-		this.products.add(p);
+		this.productWithCategoryNames.add(p);
 		this.quantities.add(quantity);
 	}
 	
 	public void empty() {
-		this.products = new ArrayList<ProductWithCategoryName>();
+		this.productWithCategoryNames = new ArrayList<ProductWithCategoryName>();
 		this.quantities = new ArrayList<Integer>();
 	}
 
@@ -51,14 +51,14 @@ public class ShoppingCart {
 	 * @return the products
 	 */
 	public List<ProductWithCategoryName> getProducts() {
-		return products;
+		return productWithCategoryNames;
 	}
 
 	/**
-	 * @param products the products to set
+	 * @param productWithCategoryNames the products to set
 	 */
-	public void setProducts(List<ProductWithCategoryName> products) {
-		this.products = products;
+	public void setProducts(List<ProductWithCategoryName> productWithCategoryNames) {
+		this.productWithCategoryNames = productWithCategoryNames;
 	}
 
 }

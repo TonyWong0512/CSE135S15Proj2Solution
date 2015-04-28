@@ -75,8 +75,7 @@ public class ProductWithCategoryName {
         return price;
     }
 
-    public static ArrayList<ProductWithCategoryName> getProductsWithCategoryNamesWithFilter(String filter)
-            throws SQLException {
+    public static ArrayList<ProductWithCategoryName> getProductsWithCategoryNamesWithFilter(String filter) throws SQLException {
         ArrayList<ProductWithCategoryName> productWithCategoryNames = new ArrayList<ProductWithCategoryName>();
         try {
             Class.forName("org.postgresql.Driver");

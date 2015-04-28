@@ -1,4 +1,9 @@
+/**
+ * 
+ */
 package models;
+
+import helpers.AnalyticsHelper.Order;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,27 +12,34 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CategoryWithCount {
+/**
+ * @author Jules Testard
+ */
+public class Product {
 
     private int id;
 
+    private int cid;
+
     private String name;
 
-    private String description;
+    private String SKU;
 
-    private int count;
+    private int price;
 
     /**
      * @param id
+     * @param cid
      * @param name
-     * @param description
-     * @param count
+     * @param sKU
+     * @param price
      */
-    public CategoryWithCount(int id, String name, String description, int count) {
+    public Product(int id, int cid, String name, String sKU, int price) {
         this.id = id;
+        this.cid = cid;
         this.name = name;
-        this.description = description;
-        this.count = count;
+        SKU = sKU;
+        this.price = price;
     }
 
     /**
@@ -45,41 +57,49 @@ public class CategoryWithCount {
     }
 
     /**
-     * @return the description
+     * @return the sKU
      */
-    public String getDescription() {
-        return description;
+    public String getSKU() {
+        return SKU;
     }
 
     /**
-     * @return the count
+     * @return the price
      */
-    public int getCount() {
-        return count;
+    public int getPrice() {
+        return price;
     }
 
-    public static ArrayList<CategoryWithCount> getCategoriesWithCount() throws SQLException {
-        ArrayList<CategoryWithCount> categoryWithCounts = new ArrayList<CategoryWithCount>();
+    /**
+     * @return the cid
+     */
+    public int getCid() {
+        return cid;
+    }
+
+    public static ArrayList<Product> getProductsByOrder(Order o) throws SQLException {
+        ArrayList<Product> products = new ArrayList<Product>();
         try {
             Class.forName("org.postgresql.Driver");
         } catch (Exception e) {
             System.err.println("Internal Server Error. This shouldn't happen.");
-            return new ArrayList<CategoryWithCount>();
+            return new ArrayList<Product>();
         }
         String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
         String user = "postgres";
         String password = "postgres";
         Connection conn = DriverManager.getConnection(url, user, password);
         Statement stmt = conn.createStatement();
-        String query = "SELECT c.id, c.name, c.description, COUNT(p.id) as count FROM Categories c LEFT OUTER JOIN Products p ON c.id=p.cid GROUP BY c.id, c.name, c.description";
+        String query = "SELECT * FROM products ORDER BY name LIMIT 10";
         ResultSet rs = stmt.executeQuery(query);
         while (rs.next()) {
             Integer id = rs.getInt(1);
-            String name = rs.getString(2);
-            String description = rs.getString(3);
-            Integer count = rs.getInt(4);
-            categoryWithCounts.add(new CategoryWithCount(id, name, description, count));
+            Integer cid = rs.getInt(2);
+            String name = rs.getString(3);
+            String SKU = rs.getString(4);
+            Integer price = rs.getInt(5);
+            products.add(new Product(id, cid, name, SKU, price));
         }
-        return categoryWithCounts;
+        return products;
     }
 }
