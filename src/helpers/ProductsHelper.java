@@ -3,6 +3,7 @@ package helpers;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,9 @@ public class ProductsHelper {
 
     public static List<ProductWithCategoryName> listProducts(HttpServletRequest request) {
         List<ProductWithCategoryName> productWithCategoryNames = new ArrayList<ProductWithCategoryName>();
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
         String categoryFilter = "", searchFilter = "";
         try {
             Integer cid = Integer.parseInt(request.getParameter("category"));
@@ -52,7 +56,8 @@ public class ProductsHelper {
 
     public static String modifyProducts(HttpServletRequest request) {
         Connection conn = null;
-        Statement stmt;
+        Statement stmt = null;
+        ResultSet rs = null;
         try {
             try {
                 Class.forName("org.postgresql.Driver");
@@ -64,7 +69,6 @@ public class ProductsHelper {
             String password = "postgres";
             conn = DriverManager.getConnection(url, user, password);
             stmt = conn.createStatement();
-            ResultSet rs = null;
             String action = null, id_str = null;
             String name = "", cname = "", sku = "", price = "", cid = "";
             try {
@@ -145,7 +149,13 @@ public class ProductsHelper {
             }
         } catch (Exception e) {
             return HelperUtils.printError("Some error happened!<br/>" + e.getLocalizedMessage());
+        } finally {
+            try {
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
 }

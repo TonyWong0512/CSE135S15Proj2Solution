@@ -3,6 +3,7 @@ package helpers;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,8 @@ public class CategoriesHelper {
 
     public static String modifyCategories(HttpServletRequest request) {
         Connection conn = null;
-        Statement stmt;
+        Statement stmt = null;
+        ResultSet rs = null;
         try {
             try {
                 Class.forName("org.postgresql.Driver");
@@ -36,7 +38,7 @@ public class CategoriesHelper {
             String password = "postgres";
             conn = DriverManager.getConnection(url, user, password);
             stmt = conn.createStatement();
-            ResultSet rs = null;
+            rs = null;
             String action = null, id_str = null;
             String name = "", description = "";
             try {
@@ -65,6 +67,8 @@ public class CategoriesHelper {
                     stmt.execute(SQL_1);
                     conn.commit();
                     conn.setAutoCommit(true);
+                    stmt.close();
+                    conn.close();
                     return HelperUtils.printSuccess("Insertion successful");
                 } catch (Exception e) {
                     return HelperUtils
@@ -116,6 +120,13 @@ public class CategoriesHelper {
             }
         } catch (Exception e) {
             return HelperUtils.printError("Some error happened!<br/>" + e.getLocalizedMessage());
+        } finally {
+            try {
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
