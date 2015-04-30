@@ -3,8 +3,9 @@
  */
 package models;
 
+import helpers.HelperUtils;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -75,18 +76,16 @@ public class ProductWithCategoryName {
         return price;
     }
 
-    public static ArrayList<ProductWithCategoryName> getProductsWithCategoryNamesWithFilter(String filter) throws SQLException {
+    public static ArrayList<ProductWithCategoryName> getProductsWithCategoryNamesWithFilter(String filter)
+            throws SQLException {
         ArrayList<ProductWithCategoryName> productWithCategoryNames = new ArrayList<ProductWithCategoryName>();
+        Connection conn = null;
         try {
-            Class.forName("org.postgresql.Driver");
+            conn = HelperUtils.connect();
         } catch (Exception e) {
             System.err.println("Internal Server Error. This shouldn't happen.");
             return new ArrayList<ProductWithCategoryName>();
         }
-        String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-        String user = "postgres";
-        String password = "postgres";
-        Connection conn = DriverManager.getConnection(url, user, password);
         Statement stmt = conn.createStatement();
         String query = "WITH selected AS (SELECT * FROM products" + filter
                 + ") SELECT s.id, c.name, s.name, s.SKU, s.price FROM selected s JOIN categories c ON s.cid = c.id";

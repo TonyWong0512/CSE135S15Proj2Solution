@@ -4,9 +4,9 @@
 package models;
 
 import helpers.AnalyticsHelper.Order;
+import helpers.HelperUtils;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -79,16 +79,13 @@ public class Product {
 
     public static ArrayList<Product> getProductsByOrder(Order o) throws SQLException {
         ArrayList<Product> products = new ArrayList<Product>();
+        Connection conn = null;
         try {
-            Class.forName("org.postgresql.Driver");
+            conn = HelperUtils.connect();
         } catch (Exception e) {
             System.err.println("Internal Server Error. This shouldn't happen.");
             return new ArrayList<Product>();
         }
-        String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-        String user = "postgres";
-        String password = "postgres";
-        Connection conn = DriverManager.getConnection(url, user, password);
         Statement stmt = conn.createStatement();
         String query = "SELECT * FROM products ORDER BY name LIMIT 10";
         ResultSet rs = stmt.executeQuery(query);

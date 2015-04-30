@@ -1,7 +1,8 @@
 package models;
 
+import helpers.HelperUtils;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -60,16 +61,13 @@ public class CategoryWithCount {
 
     public static ArrayList<CategoryWithCount> getCategoriesWithCount() throws SQLException {
         ArrayList<CategoryWithCount> categoryWithCounts = new ArrayList<CategoryWithCount>();
+        Connection conn = null;
         try {
-            Class.forName("org.postgresql.Driver");
+            conn = HelperUtils.connect();
         } catch (Exception e) {
             System.err.println("Internal Server Error. This shouldn't happen.");
             return new ArrayList<CategoryWithCount>();
         }
-        String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-        String user = "postgres";
-        String password = "postgres";
-        Connection conn = DriverManager.getConnection(url, user, password);
         Statement stmt = conn.createStatement();
         String query = "SELECT c.id, c.name, c.description, COUNT(p.id) as count FROM Categories c LEFT OUTER JOIN Products p ON c.id=p.cid GROUP BY c.id, c.name, c.description";
         ResultSet rs = stmt.executeQuery(query);
@@ -85,16 +83,13 @@ public class CategoryWithCount {
 
     public static ArrayList<CategoryWithCount> getCategories() throws SQLException {
         ArrayList<CategoryWithCount> categoryWithCounts = new ArrayList<CategoryWithCount>();
+        Connection conn = null;
         try {
-            Class.forName("org.postgresql.Driver");
+            conn = HelperUtils.connect();
         } catch (Exception e) {
             System.err.println("Internal Server Error. This shouldn't happen.");
             return new ArrayList<CategoryWithCount>();
         }
-        String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-        String user = "postgres";
-        String password = "postgres";
-        Connection conn = DriverManager.getConnection(url, user, password);
         Statement stmt = conn.createStatement();
         String query = "SELECT c.id, c.name, c.description FROM Categories c";
         ResultSet rs = stmt.executeQuery(query);
