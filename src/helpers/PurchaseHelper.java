@@ -1,7 +1,6 @@
 package helpers;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -14,14 +13,10 @@ public class PurchaseHelper {
         Statement stmt = null;
         try {
             try {
-                Class.forName("org.postgresql.Driver");
+                conn = HelperUtils.connect();
             } catch (Exception e) {
                 return HelperUtils.printError("Internal Server Error. This shouldn't happen.");
             }
-            String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-            String user = "postgres";
-            String password = "postgres";
-            conn = DriverManager.getConnection(url, user, password);
             stmt = conn.createStatement();
             for (int i = 0; i < cart.getProducts().size(); i++) {
                 ProductWithCategoryName p = cart.getProducts().get(i);
