@@ -13,14 +13,14 @@
             colOffset = Integer.parseInt(request.getParameter("col_offset"));            
         } catch (NumberFormatException e) {}
         if (rowType == null || state == null || category == null || age == null || rowOffset == null
-                || colOffset == null) {
-            out.println(HelperUtils.printError("Invalid form values"));
+                || colOffset == null || order == null) {
+            out.println(HelperUtils.printError("Bad request. Please try again."));
         } else {
             Analytics analytics;
             if (rowType.equals("States")) {
-                analytics = AnalyticsHelper.AnalysisForStates(state, category, age, rowOffset, colOffset, out);
+                analytics = AnalyticsHelper.AnalysisForStates(state, order, category, age, rowOffset, colOffset, out);
             } else {
-                analytics = AnalyticsHelper.AnalysisForUsers(state, category, age, rowOffset, colOffset, out);
+                analytics = AnalyticsHelper.AnalysisForUsers(state, order, category, age, rowOffset, colOffset, out);
             }
             String catStr = (category.equals("0")) ? "All" : category;
             String ageStr = (age.equals("0")) ? "All" : age;
@@ -40,7 +40,7 @@
 		<tr align="center">
 			<th class="col-md-1"><B></B></th>
 			<%
-			    for (Integer pid : analytics.getProducts().keySet()) {
+			    for (Integer pid : analytics.getProductPositions()) {
 			        Integer price = analytics.getProductPrices().get(pid);
 			        price = (price != null) ? price : 0;
 			%>
@@ -60,14 +60,14 @@
 	<tbody>
 	<% if (rowType.equals("States")) { %>
         <%
-            for (Integer sid : analytics.getStates().keySet()) {
+            for (Integer sid : analytics.getStatePositions()) {
                 Integer price = analytics.getStatePrices().get(sid);
                 price = (price != null) ? price : 0;
         %>
         <tr align="center">
             <td class="col-md-1"><B><%=analytics.getStates().get(sid).getName()%></B> <div> <%= price %> </div> </td>
             <%
-                for (Integer pid : analytics.getProducts().keySet()) {
+                for (Integer pid : analytics.getProductPositions()) {
             %>
             <td class="col-md-1"> <%= prices[i][j] %></td>
             <%
@@ -89,14 +89,14 @@
         %>
 	<% } else { %>
 		<%
-		    for (Integer uid : analytics.getUsers().keySet()) {
+		    for (Integer uid : analytics.getUserPositions()) {
 		        Integer price = analytics.getUserPrices().get(uid);
 		        price = (price != null) ? price : 0;
 		%>
 		<tr align="center">
 			<td class="col-md-1"><B><%=analytics.getUsers().get(uid).getUserName()%></B> <div> <%= price %> </div> </td>
 			<%
-			    for (Integer pid : analytics.getProducts().keySet()) {
+			    for (Integer pid : analytics.getProductPositions()) {
 			%>
 			<td class="col-md-1"> <%= prices[i][j] %></td>
 			<%
