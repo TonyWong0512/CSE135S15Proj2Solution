@@ -1,7 +1,6 @@
 package helpers;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,14 +37,10 @@ public class CategoriesHelper {
         ResultSet rs = null;
         try {
             try {
-                Class.forName("org.postgresql.Driver");
+                conn = HelperUtils.connect();
             } catch (Exception e) {
                 return HelperUtils.printError("Internal Server Error. This shouldn't happen.");
             }
-            String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-            String user = "postgres";
-            String password = "postgres";
-            conn = DriverManager.getConnection(url, user, password);
             stmt = conn.createStatement();
             rs = null;
             String action = null, id_str = null;

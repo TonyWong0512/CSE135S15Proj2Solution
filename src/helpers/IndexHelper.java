@@ -1,7 +1,6 @@
 package helpers;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -18,14 +17,10 @@ public class IndexHelper {
         try {
 
             try {
-                Class.forName("org.postgresql.Driver");
+                conn = HelperUtils.connect();
             } catch (Exception e) {
                 System.out.println("Driver error");
             }
-            String url = "jdbc:postgresql://127.0.0.1:5432/cse135";
-            String user = "postgres";
-            String password = "postgres";
-            conn = DriverManager.getConnection(url, user, password);
             stmt = conn.createStatement();
             ResultSet rs = null;
             rs = stmt.executeQuery("SELECT * FROM  users where name='" + name + "';");
