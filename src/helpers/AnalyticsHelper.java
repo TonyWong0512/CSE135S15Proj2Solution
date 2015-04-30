@@ -176,6 +176,7 @@ public class AnalyticsHelper {
                 SQL_amount_col = "select s.pid, sum(s.quantity*s.price) from p_t p, sales s, users u where s.pid=p.id  and s.uid=u.id and u.state='"
                         + state + "' and u.age>" + minAge + " and u.age<=" + maxAge + "  group by s.pid;";
             }
+            long start=System.currentTimeMillis();
             // Get customer
             HashMap<Integer, User> users = new HashMap<Integer, User>();
             HashMap<Integer, Integer> userPosition = new HashMap<Integer, Integer>();
@@ -246,7 +247,9 @@ public class AnalyticsHelper {
                 int amount = rs.getInt(3);
                 prices[userPosition.get(uid)][productPosition.get(pid)] = amount;
             }
-            return new Analytics(maxUser, maxProduct, 0, productPrices, userPrices, null, products, users, null, prices);
+            long end=System.currentTimeMillis();
+            long time_taken = end-start;
+            return new Analytics(maxUser, maxProduct, 0, productPrices, userPrices, null, products, users, null, prices, time_taken);
         } catch (SQLException e) {
             printError(out, e);
             return new Analytics();
@@ -287,9 +290,9 @@ public class AnalyticsHelper {
 
             if (("All").equals(state) && ("0").equals(category) && ("0").equals(age))//0,0,0
             {
-                //                SQL_1 = "select id, name from states order by name asc offset " + rowOffset + " limit " + show_num_row;
-                //                SQL_ut = "insert into us_t (id, state) select u2.id, u.name from (" + SQL_1
-                //                        + ") as st left outer join users u on st.id = u.state order by st.name";
+//                SQL_1 = "select id, name from states order by name asc offset " + rowOffset + " limit " + show_num_row;
+//                SQL_ut = "insert into us_t (id, state) select u2.id, u.name from (" + SQL_1
+//                        + ") as st left outer join users u on st.id = u.state order by st.name";
 
                 SQL_1 = "select state from users group by state order by state asc offset " + rowOffset + " limit "
                         + show_num_row;
@@ -419,6 +422,7 @@ public class AnalyticsHelper {
                 SQL_amount_col = "select s.pid, sum(s.quantity*s.price) from ps_t p, sales s, users u where s.pid=p.id  and s.uid=u.id and u.state='"
                         + state + "' and u.age>" + minAge + " and u.age<=" + maxAge + "  group by s.pid;";
             }
+            long start = System.currentTimeMillis();
             // Get customer
             HashMap<Integer, State> states = new HashMap<Integer, State>();
             HashMap<Integer, Integer> statePosition = new HashMap<Integer, Integer>();
@@ -497,8 +501,10 @@ public class AnalyticsHelper {
                 int amount = rs.getInt(3);
                 prices[statePosition.get(sid)][productPosition.get(pid)] = amount;
             }
+            long end = System.currentTimeMillis();
+            long time_taken = end-start;
             return new Analytics(0, maxProduct, maxState, productPrices, null, statePrices, products, null, states,
-                    prices);
+                    prices, time_taken);
         } catch (SQLException e) {
             printError(out, e);
             return new Analytics();

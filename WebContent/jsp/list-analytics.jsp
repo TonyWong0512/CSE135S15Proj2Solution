@@ -16,20 +16,21 @@
                 || colOffset == null) {
             out.println(HelperUtils.printError("Invalid form values"));
         } else {
-            String catStr = (category.equals("0")) ? "All" : category;
-            String ageStr = (age.equals("0")) ? "All" : age;
-            String result = "Searching " + rowType;
-            result += " with (state=\"" + state + "\"";
-            result += ",category=\"" + catStr + "\"";
-            result += ",age=\"" + ageStr + "\"";
-            result += ",order=\"" + order + "\")";
-            out.println(HelperUtils.printSuccess(result));
             Analytics analytics;
             if (rowType.equals("States")) {
                 analytics = AnalyticsHelper.AnalysisForStates(state, category, age, rowOffset, colOffset, out);
             } else {
                 analytics = AnalyticsHelper.AnalysisForUsers(state, category, age, rowOffset, colOffset, out);
             }
+            String catStr = (category.equals("0")) ? "All" : category;
+            String ageStr = (age.equals("0")) ? "All" : age;
+            String result = "Searching " + rowType;
+            result += " with (state=\"" + state + "\"";
+            result += ",category=\"" + catStr + "\"";
+            result += ",age=\"" + ageStr + "\"";
+            result += ",order=\"" + order + "\"";
+            result += ",time=" + analytics.getTime_taken() + "ms)";
+            out.println(HelperUtils.printSuccess(result));
             int size = 10 - analytics.getProducts().size();
             int [][] prices = analytics.getPrices();
             int i = 0, j = 0;

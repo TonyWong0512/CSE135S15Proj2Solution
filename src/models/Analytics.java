@@ -9,6 +9,8 @@ public class Analytics {
     private int totalProductCount;
 
     private int totalStateCount;
+    
+    private long time_taken;
 
     private HashMap<Integer, Integer> productPrices = null;
 
@@ -50,7 +52,7 @@ public class Analytics {
     public Analytics(int totalUserCount, int totalProductCount, int totalStateCount,
             HashMap<Integer, Integer> productPrices, HashMap<Integer, Integer> userPrices,
             HashMap<Integer, Integer> statePrices, HashMap<Integer, Product> products, HashMap<Integer, User> users,
-            HashMap<Integer, State> states, int[][] prices) {
+            HashMap<Integer, State> states, int[][] prices, long time_taken) {
         super();
         this.totalUserCount = totalUserCount;
         this.totalProductCount = totalProductCount;
@@ -62,6 +64,7 @@ public class Analytics {
         this.states = states;
         this.products = products;
         this.prices = prices;
+        this.time_taken = time_taken;
     }
 
     /**
@@ -133,5 +136,14 @@ public class Analytics {
     public int[][] getPrices() {
         return prices;
     }
+
+	public long getTime_taken() {
+		return time_taken;
+	}
+
+	public void setTime_taken(long time_taken) {
+		this.time_taken = time_taken;
+	}
+    
 
 }
