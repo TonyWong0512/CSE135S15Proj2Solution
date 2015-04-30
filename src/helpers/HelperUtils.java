@@ -25,6 +25,5 @@ public class HelperUtils {
 				+ "<h4 class=\"modal-title\" id=\"myModalLabel\">" + title + "</h4>"
 				+ "</div>" + "<div class=\"modal-body\">" + data
 				+ "</div></div></div></div>";
-
 	}
 }
