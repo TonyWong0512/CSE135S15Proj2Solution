@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS states CASCADE;
 /**table 0: [entity] states**/
 CREATE TABLE states (
     id          SERIAL PRIMARY KEY,
-    name        TEXT NOT NULL
+    name        TEXT NOT NULL UNIQUE
 );
 
 INSERT INTO states (name) VALUES ('Alabama');
