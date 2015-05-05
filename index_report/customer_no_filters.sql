@@ -1,4 +1,6 @@
 BEGIN;
+SET seq_page_cost TO 1;
+SET random_page_cost TO 1;
 CREATE TEMP TABLE p_t (id int, name text)ON COMMIT DELETE ROWS;
 CREATE TEMP TABLE u_t (id int, name text)ON COMMIT DELETE ROWS;
 insert into u_t (id, name) select id,name from users order by name asc offset 0 limit 20;

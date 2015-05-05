@@ -72,3 +72,76 @@ INSERT 0 6
 (21 rows)
 
 COMMIT
+BEGIN
+CREATE TABLE
+CREATE TABLE
+INSERT 0 20
+INSERT 0 2
+                                                                       QUERY PLAN                                                                       
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=157.75..170.05 rows=1230 width=12) (actual time=0.322..0.324 rows=1 loops=1)
+   Output: s2.uid, sum((s2.quantity * s2.price))
+   ->  Hash Left Join  (cost=121.49..148.53 rows=1230 width=12) (actual time=0.309..0.315 rows=20 loops=1)
+         Output: s2.uid, s2.quantity, s2.price
+         Hash Cond: (u.id = s2.uid)
+         ->  Seq Scan on pg_temp_2.u_t u  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.002..0.004 rows=20 loops=1)
+               Output: u.id, u.name
+         ->  Hash  (cost=120.87..120.87 rows=50 width=12) (actual time=0.302..0.302 rows=86 loops=1)
+               Output: s2.uid, s2.quantity, s2.price
+               Buckets: 1024  Batches: 1  Memory Usage: 4kB
+               ->  Nested Loop  (cost=4.95..120.87 rows=50 width=12) (actual time=0.027..0.284 rows=86 loops=1)
+                     Output: s2.uid, s2.quantity, s2.price
+                     ->  Index Scan using products_cid on public.products p  (cost=0.27..8.29 rows=1 width=4) (actual time=0.003..0.004 rows=2 loops=1)
+                           Output: p.id, p.cid, p.name, p.sku, p.price
+                           Index Cond: (p.cid = 1)
+                     ->  Bitmap Heap Scan on public.sales s2  (cost=4.67..112.08 rows=50 width=16) (actual time=0.020..0.133 rows=43 loops=2)
+                           Output: s2.id, s2.uid, s2.pid, s2.quantity, s2.price
+                           Recheck Cond: (s2.pid = p.id)
+                           ->  Bitmap Index Scan on sales_pid  (cost=0.00..4.66 rows=50 width=0) (actual time=0.012..0.012 rows=43 loops=2)
+                                 Index Cond: (s2.pid = p.id)
+ Total runtime: 0.397 ms
+(21 rows)
+
+                                                             QUERY PLAN                                                              
+-------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=1939.44..1944.44 rows=500 width=12) (actual time=7.444..7.445 rows=2 loops=1)
+   Output: s.pid, sum((s.quantity * s.price))
+   ->  Hash Left Join  (cost=722.50..1478.19 rows=61500 width=12) (actual time=7.395..7.414 rows=86 loops=1)
+         Output: s.pid, s.quantity, s.price
+         Hash Cond: (p.id = s.pid)
+         ->  Seq Scan on pg_temp_2.p_t p  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.000..0.000 rows=2 loops=1)
+               Output: p.id, p.name
+         ->  Hash  (cost=410.00..410.00 rows=25000 width=12) (actual time=7.387..7.387 rows=25000 loops=1)
+               Output: s.pid, s.quantity, s.price
+               Buckets: 4096  Batches: 1  Memory Usage: 1075kB
+               ->  Seq Scan on public.sales s  (cost=0.00..410.00 rows=25000 width=12) (actual time=0.001..3.145 rows=25000 loops=1)
+                     Output: s.pid, s.quantity, s.price
+ Total runtime: 7.591 ms
+(13 rows)
+
+                                                                   QUERY PLAN                                                                    
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=1273.60..1323.32 rows=4972 width=16) (actual time=11.125..11.125 rows=0 loops=1)
+   Output: s.uid, s.pid, sum((s.quantity * s.price))
+   ->  Hash Join  (cost=914.71..1121.45 rows=15215 width=16) (actual time=11.113..11.113 rows=0 loops=1)
+         Output: s.uid, s.pid, s.quantity, s.price
+         Hash Cond: (p.id = s.pid)
+         ->  Seq Scan on pg_temp_2.p_t p  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.002..0.003 rows=2 loops=1)
+               Output: p.id, p.name
+         ->  Hash  (cost=837.40..837.40 rows=6185 width=16) (actual time=11.107..11.107 rows=101 loops=1)
+               Output: s.uid, s.pid, s.quantity, s.price
+               Buckets: 1024  Batches: 1  Memory Usage: 5kB
+               ->  Hash Join  (cost=722.50..837.40 rows=6185 width=16) (actual time=11.043..11.089 rows=101 loops=1)
+                     Output: s.uid, s.pid, s.quantity, s.price
+                     Hash Cond: (u.id = s.uid)
+                     ->  Seq Scan on pg_temp_2.u_t u  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.001..0.001 rows=20 loops=1)
+                           Output: u.id, u.name
+                     ->  Hash  (cost=410.00..410.00 rows=25000 width=16) (actual time=11.030..11.030 rows=25000 loops=1)
+                           Output: s.uid, s.pid, s.quantity, s.price
+                           Buckets: 4096  Batches: 1  Memory Usage: 1172kB
+                           ->  Seq Scan on public.sales s  (cost=0.00..410.00 rows=25000 width=16) (actual time=0.004..5.749 rows=25000 loops=1)
+                                 Output: s.uid, s.pid, s.quantity, s.price
+ Total runtime: 11.164 ms
+(21 rows)
+
+COMMIT
