@@ -1,6 +1,7 @@
 package helpers;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -23,21 +24,26 @@ public class PurchaseHelper {
             for (int i = 0; i < cart.getProducts().size(); i++) {
                 ProductWithCategoryName p = cart.getProducts().get(i);
                 int quantity = cart.getQuantities().get(i);
-                String SQL_1 = "INSERT INTO sales (uid, pid, quantity, price) VALUES(" + uid + ",'" + p.getId() + "','"
-                        + quantity + "', " + p.getPrice() + ");";
-                try {
-                    stmt.execute(SQL_1);
-                    conn.commit();
-                } catch (Exception e) {
-                    return HelperUtils
-                            .printError("Insert failed! Please <a href=\"products\" target=\"_self\">insert it</a> again.<br/>"
-                                    + e.getLocalizedMessage());
-                }
+                conn.setAutoCommit(false);
+                String SQL_1 = "INSERT INTO cart_history (uid) VALUES (" + uid + ");";
+                stmt.execute(SQL_1);
+                // Gets latest inserted id. See this stackoverflow for more information http://stackoverflow.com/questions/2944297/postgresql-function-for-last-inserted-id
+                String SQL_2 = "SELECT lastval();";
+                ResultSet rs = stmt.executeQuery(SQL_2);
+                rs.next();
+                int cart_id = rs.getInt(1);
+                String SQL_3 = "INSERT INTO sales (uid, pid, cart_id, quantity, price) VALUES(" + uid + ",'"
+                        + p.getId() + "','" + cart_id + "','" + quantity + "', " + p.getPrice() + ");";
+                stmt.execute(SQL_3);
+                conn.commit();
+                conn.setAutoCommit(true);
             }
             cart.empty();
             return HelperUtils.printSuccess("Purchase successful!");
         } catch (Exception e) {
-            return HelperUtils.printError(e.getLocalizedMessage());
+            return HelperUtils
+                    .printError("Insert failed! Please <a href=\"products\" target=\"_self\">insert it</a> again.<br/>"
+                            + e.getLocalizedMessage());
         } finally {
             try {
                 stmt.close();
