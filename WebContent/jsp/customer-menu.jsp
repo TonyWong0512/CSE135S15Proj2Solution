@@ -5,8 +5,6 @@
             <ul class="nav nav-list">
                 <li class="active"><a href="browse" title="Browsing">Product Browsing</a></li>
                 <li><a href="purchase" title="Purchase">Buy Shopping Cart</a></li>
-                <li><a href="login" title="Login">Login</a></li>
-                <li><a href="signup" title="Signup">Sign Up</a></li>
             </ul>
         </div>
     </div>
