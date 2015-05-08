@@ -9,14 +9,8 @@
                         %>
                         <b> Hello <%
                         	out.println(session.getAttribute("name"));
-                        %> <%
- 	if (((String) session.getAttribute("role"))
- 				.equalsIgnoreCase("customer")) {
- %> &nbsp | &nbsp
-                        </b> <a href="purchase">Buy Shopping Cart</a>
-                        <%
-                        	}
                         %>
+                        &nbsp | &nbsp </b> <a href="purchase">Buy Shopping Cart</a>
                         <%
                         	}
                         %>

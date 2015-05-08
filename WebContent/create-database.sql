@@ -3,11 +3,12 @@ DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS sales CASCADE;
 DROP TABLE IF EXISTS states CASCADE;
+DROP TABLE IF EXISTS cart_history CASCADE;
 
 /**table 0: [entity] states**/
 CREATE TABLE states (
     id          SERIAL PRIMARY KEY,
-    name        TEXT NOT NULL
+    name        TEXT NOT NULL UNIQUE
 );
 
 INSERT INTO states (name) VALUES ('Alabama');
@@ -68,14 +69,13 @@ CREATE TABLE users (
     name        TEXT NOT NULL UNIQUE CHECK (name <> ''),
     role        TEXT NOT NULL,
     age         INTEGER NOT NULL,
-    state       INTEGER REFERENCES states (id) ON DELETE CASCADE
+    state       INTEGER REFERENCES states (id) NOT NULL
 );
 INSERT INTO users (name, role, age, state) VALUES('CSE','owner',35,3);
 INSERT INTO users (name, role, age, state) VALUES('David','customer',33,12);
 INSERT INTO users (name, role, age, state) VALUES('Floyd','customer',27,14);
 INSERT INTO users (name, role, age, state) VALUES('James','customer',55,1);
 INSERT INTO users (name, role, age, state) VALUES('Ross','customer',24,5);
-SELECT * FROM  users  order by id asc limit 5;
 
 
 /**table 2: [entity] category**/
@@ -88,12 +88,11 @@ INSERT INTO categories (name, description) VALUES('Computers','A computer is a g
 INSERT INTO categories (name, description) VALUES('Cell Phones','A mobile phone (also known as a cellular phone, cell phone, and a hand phone) is a phone that can make and receive telephone calls over a radio link while moving around a wide geographic area. It does so by connecting to a cellular network provided by a mobile phone operator, allowing access to the public telephone network.');
 INSERT INTO categories (name, description) VALUES('Cameras','A camera is an optical instrument that records images that can be stored directly, transmitted to another location, or both. These images may be still photographs or moving images such as videos or movies.');
 INSERT INTO categories (name, description) VALUES('Video Games','A video game is an electronic game that involves human interaction with a user interface to generate visual feedback on a video device..');
-SELECT * FROM categories order by id asc;
 
 /**table 3: [entity] product**/
 CREATE TABLE products (
     id          SERIAL PRIMARY KEY,
-    cid         INTEGER REFERENCES categories (id) ON DELETE CASCADE,
+    cid         INTEGER REFERENCES categories (id) NOT NULL,
     name        TEXT NOT NULL,
     SKU         TEXT NOT NULL UNIQUE,
     price       INTEGER NOT NULL
@@ -110,24 +109,18 @@ INSERT INTO products (cid, name, SKU, price) VALUES(3, 'Nikon D3100',       '308
 INSERT INTO products (cid, name, SKU, price) VALUES(4, 'Xbox 360',          '405065',   249);/**10**/
 INSERT INTO products (cid, name, SKU, price) VALUES(4, 'Nintendo Wii U ',    '407033',  430);
 INSERT INTO products (cid, name, SKU, price) VALUES(4, 'Nintendo Wii',      '408076',   232);
-SELECT * FROM products order by id asc limit 10;
 
+-- should be removed for project 2.
+CREATE TABLE cart_history (
+    id          SERIAL PRIMARY KEY,
+    uid         INTEGER REFERENCES users (id) NOT NULL
+);
 
-
-/**table 4: [relation] carts**/
 CREATE TABLE sales (
     id          SERIAL PRIMARY KEY,
-    uid         INTEGER REFERENCES users (id) ON DELETE CASCADE,
-    pid         INTEGER REFERENCES products (id) ON DELETE CASCADE,
+    uid         INTEGER REFERENCES users (id) NOT NULL,
+    cart_id     INTEGER REFERENCES cart_history (id) NOT NULL, -- should be removed for project 2.
+    pid         INTEGER REFERENCES products (id) NOT NULL,
     quantity    INTEGER NOT NULL,
     price       INTEGER NOT NULL
 );
-INSERT INTO sales (uid, pid, quantity, price) VALUES(3, 1 , 2, 1200);
-INSERT INTO sales (uid, pid, quantity, price) VALUES(3, 2 , 1, 480);
-INSERT INTO sales (uid, pid, quantity, price) VALUES(4, 10, 4, 249);
-INSERT INTO sales (uid, pid, quantity, price) VALUES(5, 12, 2, 232);
-INSERT INTO sales (uid, pid, quantity, price) VALUES(5, 9 , 5, 520);
-INSERT INTO sales (uid, pid, quantity, price) VALUES(5, 5 , 3, 488);
-INSERT INTO sales (uid, pid, quantity, price) VALUES(5, 1, 1, 1200);
-
-SELECT * FROM sales order by id desc;
