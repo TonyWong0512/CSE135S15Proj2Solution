@@ -33,16 +33,16 @@ public class DataGeneratorBulk
 	public static void main(String[] args) throws Exception
 	{
 		// "Hot Case" : 50MB
-//		int Num_users		=	5000;
-//		int Num_categories	=	250;
-//		int Num_products	=	500;
-//		int Num_sales		=	25000;
+		int Num_users		=	5000;
+		int Num_categories	=	250;
+		int Num_products	=	500;
+		int Num_sales		=	25000;
 		
 		// "Warm Case" : 500MB
-		int Num_users		=	1000000;
-		int Num_categories	=	250;
-		int Num_products	=	100000;
-		int Num_sales		=	5000000;
+//		int Num_users		=	1000000;
+//		int Num_categories	=	250;
+//		int Num_products	=	100000;
+//		int Num_sales		=	5000000;
 		
 		// "Cold Case" : 5GB
 //		int Num_users		=	5000000;
@@ -94,7 +94,7 @@ public class DataGeneratorBulk
 	{
 	   try{
 	    try{Class.forName("org.postgresql.Driver");}catch(Exception e){System.out.println("Driver error");}
-	    String url="jdbc:postgresql://127.0.0.1:5432/cse135"; //big database name
+	    String url="jdbc:postgresql://127.0.0.1:5432/cse135_small"; //big database name
 	    String user="postgres";							 //username
 	    String password="postgres";						//password
 	    conn=DriverManager.getConnection(url, user, password);
