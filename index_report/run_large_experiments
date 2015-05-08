@@ -1,5 +1,0 @@
-psql -f customer_no_filters.sql -d cse135_big >> large_4.5GB/customer_no_filters
-psql -f customer_filter_category.sql -d cse135_big >> large_4.5GB/customer_filter_category
-psql -f customer_no_filter_topk.sql -d cse135_big >> large_4.5GB/customer_no_filter_topk
-psql -f states_no_filter_topk.sql -d cse135_big >> large_4.5GB/states_no_filter_topk
-

@@ -1,6 +1,8 @@
 BEGIN;
 SET seq_page_cost TO 1;
-SET random_page_cost TO 1;
+SET random_page_cost TO 4;
+SET work_mem TO 256;
+-- SET shared_buffers TO 512;
 CREATE TEMP TABLE p_t (name text, id int, price int) ON COMMIT DELETE ROWS;
 CREATE TEMP TABLE s_t (name text, id int, price int) ON COMMIT DELETE ROWS;
 EXPLAIN ANALYZE VERBOSE insert into s_t (name, id, price) select st.name, st.id, sum(us.quantity*us.price) as price
