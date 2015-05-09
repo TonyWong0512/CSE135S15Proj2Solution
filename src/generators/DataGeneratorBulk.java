@@ -1,5 +1,3 @@
-package generators;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,8 +28,13 @@ public class DataGeneratorBulk
 	int MAXBuffer=1000000;
 	private Connection conn = null;
 	private Statement stmt=null;
+	static private String databaseName = null;
+
 	public static void main(String[] args) throws Exception
 	{
+		String path = System.getProperty("user.dir");
+		databaseName = args[0];
+
 		// "Hot Case" : 50MB
 		int Num_users		=	5000;
 		int Num_categories	=	250;
@@ -50,10 +53,10 @@ public class DataGeneratorBulk
 //		int Num_products	=	100000;
 //		int Num_sales		=	25000000;
 		
-		 String  usersPath		=	"/home/cse135/Desktop/cse135s15/users.txt",
-	    		 categoriesPath	=	"/home/cse135/Desktop/cse135s15/categories.txt",
-	    		 productsPath	=	"/home/cse135/Desktop/cse135s15/products.txt",
-	     		 salesPath		=	"/home/cse135/Desktop/cse135s15/sales.txt";
+		 String  usersPath = path + File.separator + "users.txt",
+	    		 categoriesPath	= path + File.separator +  "categories.txt",
+	    		 productsPath = path + File.separator + "products.txt",
+	     		 salesPath = path + File.separator +  "sales.txt";
 		
 		DataGeneratorBulk dg=new DataGeneratorBulk();
 		dg.createData(usersPath, categoriesPath, productsPath, salesPath, Num_users,Num_categories,Num_products,Num_sales);
@@ -93,8 +96,8 @@ public class DataGeneratorBulk
 	public boolean openConn() throws Exception
 	{
 	   try{
-	    try{Class.forName("org.postgresql.Driver");}catch(Exception e){System.out.println("Driver error");}
-	    String url="jdbc:postgresql://127.0.0.1:5432/cse135_small"; //big database name
+	    try{Class.forName("org.postgresql.Driver");}catch(Exception e){System.out.println("Driver error");e.printStackTrace();}
+	    String url="jdbc:postgresql://127.0.0.1:5432/" + databaseName; //big database name
 	    String user="postgres";							 //username
 	    String password="postgres";						//password
 	    conn=DriverManager.getConnection(url, user, password);
@@ -104,6 +107,7 @@ public class DataGeneratorBulk
 	   catch(SQLException e)
 	   {
 	    e.printStackTrace();
+	    System.exit(1);
 	    return false;
 	   }
 	
