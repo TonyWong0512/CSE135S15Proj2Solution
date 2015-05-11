@@ -1,0 +1,62 @@
+BEGIN
+SET
+SET
+CREATE TABLE
+CREATE TABLE
+INSERT 0 20
+INSERT 0 10
+                                                               QUERY PLAN                                                               
+----------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=777.26..826.90 rows=4964 width=12) (actual time=0.261..0.272 rows=20 loops=1)
+   Output: s.uid, sum((s.quantity * s.price))
+   ->  Nested Loop Left Join  (cost=0.00..730.80 rows=6195 width=12) (actual time=0.012..0.213 rows=102 loops=1)
+         Output: s.uid, s.quantity, s.price
+         ->  Seq Scan on pg_temp_2.u_t u  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.002..0.006 rows=20 loops=1)
+               Output: u.id, u.name
+         ->  Index Scan using sales_uid on public.sales s  (cost=0.00..0.53 rows=5 width=12) (actual time=0.003..0.007 rows=5 loops=20)
+               Output: s.id, s.uid, s.pid, s.quantity, s.price
+               Index Cond: (s.uid = u.id)
+ Total runtime: 0.352 ms
+(10 rows)
+
+                                                                   QUERY PLAN                                                                    
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=2137.93..2142.93 rows=500 width=12) (actual time=12.375..12.377 rows=10 loops=1)
+   Output: s.pid, sum((s.quantity * s.price))
+   ->  Merge Right Join  (cost=85.43..1676.68 rows=61500 width=12) (actual time=0.035..12.189 rows=496 loops=1)
+         Output: s.pid, s.quantity, s.price
+         Merge Cond: (s.pid = p.id)
+         ->  Index Scan using sales_pid on public.sales s  (cost=0.00..606.25 rows=25000 width=12) (actual time=0.023..7.692 rows=20476 loops=1)
+               Output: s.id, s.uid, s.pid, s.quantity, s.price
+         ->  Sort  (cost=85.43..88.50 rows=1230 width=4) (actual time=0.009..0.081 rows=442 loops=1)
+               Output: p.id
+               Sort Key: p.id
+               Sort Method: quicksort  Memory: 25kB
+               ->  Seq Scan on pg_temp_2.p_t p  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.001..0.002 rows=10 loops=1)
+                     Output: p.id
+ Total runtime: 12.417 ms
+(14 rows)
+
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=1181.46..1231.10 rows=4964 width=16) (actual time=0.221..0.224 rows=1 loops=1)
+   Output: s.uid, s.pid, sum((s.quantity * s.price))
+   ->  Hash Join  (cost=823.61..1029.06 rows=15240 width=16) (actual time=0.207..0.210 rows=1 loops=1)
+         Output: s.uid, s.pid, s.quantity, s.price
+         Hash Cond: (p.id = s.pid)
+         ->  Seq Scan on pg_temp_2.p_t p  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.002..0.005 rows=10 loops=1)
+               Output: p.id, p.name
+         ->  Hash  (cost=746.17..746.17 rows=6195 width=16) (actual time=0.194..0.194 rows=102 loops=1)
+               Output: s.uid, s.pid, s.quantity, s.price
+               Buckets: 1024  Batches: 1  Memory Usage: 5kB
+               ->  Nested Loop  (cost=0.00..746.17 rows=6195 width=16) (actual time=0.008..0.145 rows=102 loops=1)
+                     Output: s.uid, s.pid, s.quantity, s.price
+                     ->  Seq Scan on pg_temp_2.u_t u  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.001..0.004 rows=20 loops=1)
+                           Output: u.id, u.name
+                     ->  Index Scan using sales_uid on public.sales s  (cost=0.00..0.54 rows=5 width=16) (actual time=0.002..0.004 rows=5 loops=20)
+                           Output: s.id, s.uid, s.pid, s.quantity, s.price
+                           Index Cond: (s.uid = u.id)
+ Total runtime: 0.286 ms
+(18 rows)
+
+COMMIT
