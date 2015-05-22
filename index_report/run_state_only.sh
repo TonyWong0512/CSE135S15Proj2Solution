@@ -1,3 +1,11 @@
+## search by customer filter by category order by topk
+psql -f customer_filter_category_topk.sql -d cse135_small > hot_10MB/customer_filter_category_topk
+psql -f customer_filter_category_topk.sql -d cse135_small > hot_10MB/customer_filter_category_topk
+sudo service postgresql stop
+sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
+sudo service postgresql start
+psql -f customer_filter_category_topk.sql -d cse135_big > cold_4.5GB/customer_filter_category_topk
+
 ## search by state no filters order by name
 psql -f states_no_filters.sql -d cse135_small > hot_10MB/states_no_filters
 psql -f states_no_filters.sql -d cse135_small > hot_10MB/states_no_filters
