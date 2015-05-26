@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import models.CategoryWithCount;
-
 public class CategoriesHelper {
 
     public static List<CategoryWithCount> listCategories() {
@@ -98,6 +96,7 @@ public class CategoriesHelper {
                 String SQL_2 = "delete from categories where id=" + id_str + ";";
                 try {
                     // Check if number of products is 0 before trying to delete.
+                    conn.setAutoCommit(false);
                     rs = stmt.executeQuery(SQL_1);
                     int count = -1;
                     while (rs.next()) {
@@ -105,7 +104,6 @@ public class CategoriesHelper {
                     }
 
                     if (count <= 0) {
-                        conn.setAutoCommit(false);
                         stmt.execute(SQL_2);
                         conn.commit();
                         conn.setAutoCommit(true);
