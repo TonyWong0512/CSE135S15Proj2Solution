@@ -1,0 +1,69 @@
+BEGIN
+SET
+SET
+CREATE TABLE
+CREATE TABLE
+INSERT 0 20
+INSERT 0 10
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=19590.85..19603.15 rows=1230 width=12) (actual time=66.920..66.923 rows=2 loops=1)
+   Output: s2.uid, sum((s2.quantity * s2.price))
+   ->  Nested Loop Left Join  (cost=0.00..19581.63 rows=1230 width=12) (actual time=7.315..66.891 rows=20 loops=1)
+         Output: s2.uid, s2.quantity, s2.price
+         ->  Seq Scan on pg_temp_2.u_t u  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.003..0.013 rows=20 loops=1)
+               Output: u.id, u.name
+         ->  Nested Loop  (cost=0.00..15.85 rows=5 width=12) (actual time=3.321..3.342 rows=0 loops=20)
+               Output: s2.uid, s2.quantity, s2.price
+               ->  Index Scan using sales_uid on public.sales s2  (cost=0.00..6.48 rows=5 width=16) (actual time=0.435..1.893 rows=6 loops=20)
+                     Output: s2.id, s2.uid, s2.pid, s2.quantity, s2.price
+                     Index Cond: (s2.uid = u.id)
+               ->  Index Scan using products_pkey on public.products p  (cost=0.00..1.86 rows=1 width=4) (actual time=0.257..0.257 rows=0 loops=112)
+                     Output: p.id, p.cid, p.name, p.sku, p.price
+                     Index Cond: (p.id = s2.pid)
+                     Filter: (p.cid = 1)
+                     Rows Removed by Filter: 1
+ Total runtime: 67.367 ms
+(17 rows)
+
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=157105.69..159656.89 rows=97617 width=12) (actual time=367.103..367.565 rows=10 loops=1)
+   Output: s.pid, sum((s.quantity * s.price))
+   ->  Sort  (cost=157105.69..157499.45 rows=157503 width=12) (actual time=367.043..367.243 rows=1199 loops=1)
+         Output: s.pid, s.quantity, s.price
+         Sort Key: s.pid
+         Sort Method: quicksort  Memory: 105kB
+         ->  Nested Loop Left Join  (cost=0.00..141969.23 rows=157503 width=12) (actual time=0.938..365.883 rows=1199 loops=1)
+               Output: s.pid, s.quantity, s.price
+               ->  Seq Scan on pg_temp_2.p_t p  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.002..0.008 rows=10 loops=1)
+                     Output: p.id, p.name
+               ->  Index Scan using sales_pid on public.sales s  (cost=0.00..114.12 rows=128 width=12) (actual time=1.276..36.491 rows=120 loops=10)
+                     Output: s.id, s.uid, s.pid, s.quantity, s.price
+                     Index Cond: (s.pid = p.id)
+ Total runtime: 367.631 ms
+(14 rows)
+
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=8304.88..8305.71 rows=83 width=16) (actual time=0.241..0.241 rows=0 loops=1)
+   Output: s.uid, s.pid, sum((s.quantity * s.price))
+   ->  Hash Join  (cost=8148.70..8304.05 rows=83 width=16) (actual time=0.240..0.240 rows=0 loops=1)
+         Output: s.uid, s.pid, s.quantity, s.price
+         Hash Cond: (p.id = s.pid)
+         ->  Seq Scan on pg_temp_2.p_t p  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.003..0.005 rows=10 loops=1)
+               Output: p.id, p.name
+         ->  Hash  (cost=8066.15..8066.15 rows=6604 width=16) (actual time=0.230..0.230 rows=112 loops=1)
+               Output: s.uid, s.pid, s.quantity, s.price
+               Buckets: 1024  Batches: 1  Memory Usage: 6kB
+               ->  Nested Loop  (cost=0.00..8066.15 rows=6604 width=16) (actual time=0.010..0.198 rows=112 loops=1)
+                     Output: s.uid, s.pid, s.quantity, s.price
+                     ->  Seq Scan on pg_temp_2.u_t u  (cost=0.00..22.30 rows=1230 width=4) (actual time=0.001..0.005 rows=20 loops=1)
+                           Output: u.id, u.name
+                     ->  Index Scan using sales_uid on public.sales s  (cost=0.00..6.49 rows=5 width=16) (actual time=0.003..0.006 rows=6 loops=20)
+                           Output: s.id, s.uid, s.pid, s.quantity, s.price
+                           Index Cond: (s.uid = u.id)
+ Total runtime: 0.283 ms
+(18 rows)
+
+COMMIT

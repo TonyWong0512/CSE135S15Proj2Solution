@@ -1,0 +1,108 @@
+BEGIN
+SET
+SET
+SET
+CREATE TABLE
+CREATE TABLE
+                                                                          QUERY PLAN                                                                           
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on pg_temp_2.s_t  (cost=1708.73..1709.03 rows=20 width=44) (actual time=47.028..47.028 rows=0 loops=1)
+   ->  Subquery Scan on "*SELECT*"  (cost=1708.73..1709.03 rows=20 width=44) (actual time=46.895..46.915 rows=20 loops=1)
+         Output: "*SELECT*".name, "*SELECT*".id, "*SELECT*".price
+         ->  Limit  (cost=1708.73..1708.78 rows=20 width=44) (actual time=46.893..46.906 rows=20 loops=1)
+               Output: st.name, st.id, (sum((s.quantity * s.price)))
+               ->  Sort  (cost=1708.73..1711.80 rows=1230 width=44) (actual time=46.893..46.895 rows=20 loops=1)
+                     Output: st.name, st.id, (sum((s.quantity * s.price)))
+                     Sort Key: (sum((s.quantity * s.price)))
+                     Sort Method: top-N heapsort  Memory: 26kB
+                     ->  HashAggregate  (cost=1663.70..1676.00 rows=1230 width=44) (actual time=46.843..46.859 rows=50 loops=1)
+                           Output: st.name, st.id, sum((s.quantity * s.price))
+                           ->  Hash Right Join  (cost=191.20..1413.70 rows=25000 width=44) (actual time=2.942..35.316 rows=25000 loops=1)
+                                 Output: st.name, st.id, s.quantity, s.price
+                                 Hash Cond: (u.state = st.id)
+                                 ->  Hash Join  (cost=153.52..1032.27 rows=25000 width=12) (actual time=2.903..23.768 rows=25000 loops=1)
+                                       Output: u.state, s.quantity, s.price
+                                       Hash Cond: (s.uid = u.id)
+                                       ->  Seq Scan on public.sales s  (cost=0.00..410.00 rows=25000 width=12) (actual time=0.004..5.674 rows=25000 loops=1)
+                                             Output: s.id, s.uid, s.pid, s.quantity, s.price
+                                       ->  Hash  (cost=91.01..91.01 rows=5001 width=8) (actual time=2.888..2.888 rows=5001 loops=1)
+                                             Output: u.id, u.state
+                                             Buckets: 1024  Batches: 1  Memory Usage: 196kB
+                                             ->  Seq Scan on public.users u  (cost=0.00..91.01 rows=5001 width=8) (actual time=0.004..1.455 rows=5001 loops=1)
+                                                   Output: u.id, u.state
+                                 ->  Hash  (cost=22.30..22.30 rows=1230 width=36) (actual time=0.033..0.033 rows=50 loops=1)
+                                       Output: st.name, st.id
+                                       Buckets: 1024  Batches: 1  Memory Usage: 3kB
+                                       ->  Seq Scan on public.states st  (cost=0.00..22.30 rows=1230 width=36) (actual time=0.005..0.014 rows=50 loops=1)
+                                             Output: st.name, st.id
+ Total runtime: 47.167 ms
+(30 rows)
+
+                                                                           QUERY PLAN                                                                           
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on pg_temp_2.p_t  (cost=4212.45..4212.60 rows=10 width=18) (actual time=128.966..128.966 rows=0 loops=1)
+   ->  Subquery Scan on "*SELECT*"  (cost=4212.45..4212.60 rows=10 width=18) (actual time=128.884..128.893 rows=10 loops=1)
+         Output: "*SELECT*".name, "*SELECT*".pid, "*SELECT*".price
+         ->  Limit  (cost=4212.45..4212.47 rows=10 width=18) (actual time=128.881..128.886 rows=10 loops=1)
+               Output: p.name, s.pid, (sum((s.quantity * s.price)))
+               ->  Sort  (cost=4212.45..4274.95 rows=25000 width=18) (actual time=128.880..128.881 rows=10 loops=1)
+                     Output: p.name, s.pid, (sum((s.quantity * s.price)))
+                     Sort Key: (sum((s.quantity * s.price)))
+                     Sort Method: top-N heapsort  Memory: 25kB
+                     ->  GroupAggregate  (cost=3109.71..3672.21 rows=25000 width=18) (actual time=82.197..128.715 rows=500 loops=1)
+                           Output: p.name, s.pid, sum((s.quantity * s.price))
+                           ->  Sort  (cost=3109.71..3172.21 rows=25000 width=18) (actual time=82.137..120.355 rows=25000 loops=1)
+                                 Output: p.name, s.pid, s.quantity, s.price
+                                 Sort Key: s.pid, p.name
+                                 Sort Method: external merge  Disk: 744kB
+                                 ->  Hash Right Join  (cost=15.25..769.00 rows=25000 width=18) (actual time=0.257..18.467 rows=25000 loops=1)
+                                       Output: p.name, s.pid, s.quantity, s.price
+                                       Hash Cond: (s.pid = p.id)
+                                       ->  Seq Scan on public.sales s  (cost=0.00..410.00 rows=25000 width=12) (actual time=0.003..5.249 rows=25000 loops=1)
+                                             Output: s.id, s.uid, s.pid, s.quantity, s.price
+                                       ->  Hash  (cost=9.00..9.00 rows=500 width=10) (actual time=0.250..0.250 rows=500 loops=1)
+                                             Output: p.name, p.id
+                                             Buckets: 1024  Batches: 1  Memory Usage: 22kB
+                                             ->  Seq Scan on public.products p  (cost=0.00..9.00 rows=500 width=10) (actual time=0.005..0.124 rows=500 loops=1)
+                                                   Output: p.name, p.id
+ Total runtime: 129.156 ms
+(26 rows)
+
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=51008.06..55463.08 rows=25000 width=16) (actual time=22.368..22.532 rows=152 loops=1)
+   Output: u.state, s.pid, sum((s.quantity * s.price))
+   ->  Sort  (cost=51008.06..51849.06 rows=336402 width=16) (actual time=22.360..22.412 rows=266 loops=1)
+         Output: u.state, s.pid, s.quantity, s.price
+         Sort Key: u.state, s.pid
+         Sort Method: quicksort  Memory: 37kB
+         ->  Hash Join  (cost=2848.47..8625.65 rows=336402 width=16) (actual time=19.992..22.241 rows=266 loops=1)
+               Output: u.state, s.pid, s.quantity, s.price
+               Hash Cond: (u.id = s.uid)
+               ->  Hash Join  (cost=153.52..640.63 rows=29006 width=8) (actual time=2.668..3.306 rows=2138 loops=1)
+                     Output: u.state, u.id
+                     Hash Cond: (st.id = u.state)
+                     ->  Seq Scan on pg_temp_2.s_t st  (cost=0.00..21.60 rows=1160 width=4) (actual time=0.002..0.006 rows=20 loops=1)
+                           Output: st.name, st.id, st.price
+                     ->  Hash  (cost=91.01..91.01 rows=5001 width=8) (actual time=2.656..2.656 rows=5001 loops=1)
+                           Output: u.state, u.id
+                           Buckets: 1024  Batches: 1  Memory Usage: 196kB
+                           ->  Seq Scan on public.users u  (cost=0.00..91.01 rows=5001 width=8) (actual time=0.004..1.326 rows=5001 loops=1)
+                                 Output: u.state, u.id
+               ->  Hash  (cost=1685.95..1685.95 rows=58000 width=16) (actual time=16.970..16.970 rows=600 loops=1)
+                     Output: s.pid, s.quantity, s.price, s.uid
+                     Buckets: 1024  Batches: 16  Memory Usage: 3kB
+                     ->  Hash Join  (cost=845.50..1685.95 rows=58000 width=16) (actual time=14.417..16.581 rows=600 loops=1)
+                           Output: s.pid, s.quantity, s.price, s.uid
+                           Hash Cond: (p.id = s.pid)
+                           ->  Seq Scan on pg_temp_2.p_t p  (cost=0.00..21.60 rows=1160 width=4) (actual time=0.001..0.006 rows=10 loops=1)
+                                 Output: p.id
+                           ->  Hash  (cost=410.00..410.00 rows=25000 width=16) (actual time=14.345..14.345 rows=25000 loops=1)
+                                 Output: s.pid, s.quantity, s.price, s.uid
+                                 Buckets: 1024  Batches: 8  Memory Usage: 167kB
+                                 ->  Seq Scan on public.sales s  (cost=0.00..410.00 rows=25000 width=16) (actual time=0.003..6.485 rows=25000 loops=1)
+                                       Output: s.pid, s.quantity, s.price, s.uid
+ Total runtime: 22.593 ms
+(33 rows)
+
+COMMIT
