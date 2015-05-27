@@ -4,30 +4,25 @@
     if (action != null) {
         String rowType = request.getParameter("rowType");
         String order = request.getParameter("order");
-        String state = request.getParameter("state");
         String category = request.getParameter("category");
-        String age = request.getParameter("age");
         Integer rowOffset = null, colOffset = null;
         try {
             rowOffset = Integer.parseInt(request.getParameter("row_offset"));
             colOffset = Integer.parseInt(request.getParameter("col_offset"));            
         } catch (NumberFormatException e) {}
-        if (rowType == null || state == null || category == null || age == null || rowOffset == null
+        if (rowType == null || category == null || rowOffset == null
                 || colOffset == null || order == null) {
             out.println(HelperUtils.printError("Bad request. Please try again."));
         } else {
             Analytics analytics;
             if (rowType.equals("States")) {
-                analytics = AnalyticsHelper.AnalysisForStates(state, order, category, age, rowOffset, colOffset, out);
+                analytics = AnalyticsHelper.AnalysisForStates(order, category, rowOffset, colOffset, out);
             } else {
-                analytics = AnalyticsHelper.AnalysisForUsers(state, order, category, age, rowOffset, colOffset, out);
+                analytics = AnalyticsHelper.AnalysisForUsers(order, category, rowOffset, colOffset, out);
             }
             String catStr = (category.equals("0")) ? "All" : category;
-            String ageStr = (age.equals("0")) ? "All" : age;
             String result = "Searching " + rowType;
-            result += " with (state=\"" + state + "\"";
             result += ",category=\"" + catStr + "\"";
-            result += ",age=\"" + ageStr + "\"";
             result += ",order=\"" + order + "\"";
             result += ",time=" + analytics.getTime_taken() + "ms)";
             out.println(HelperUtils.printSuccess(result));
@@ -129,9 +124,7 @@ int colCount = analytics.getTotalProductCount();
 <form class="pull-right" action="analytics" method="POST">
 <input type="hidden" name="rowType" value="<%=rowType%>">
 <input type="hidden" name="order" value="<%=order%>">
-<input type="hidden" name="state" value="<%=state%>">
 <input type="hidden" name="category" value="<%=category%>">
-<input type="hidden" name="age" value="<%=age%>">
 <input type="hidden" name="row_offset" value="<%=rowOffset%>">
 <input type="hidden" name="col_offset" value="<%=colOffset + 10%>">
 <input type="hidden" name="action" value="search">
@@ -143,9 +136,7 @@ int colCount = analytics.getTotalProductCount();
 <form  action="analytics" method="POST">
 <input type="hidden" name="rowType" value="<%=rowType%>">
 <input type="hidden" name="order" value="<%=order%>">
-<input type="hidden" name="state" value="<%=state%>">
 <input type="hidden" name="category" value="<%=category%>">
-<input type="hidden" name="age" value="<%=age%>">
 <input type="hidden" name="row_offset" value="<%=rowOffset + 20%>">
 <input type="hidden" name="col_offset" value="<%=colOffset%>">
 <input type="hidden" name="action" value="search">

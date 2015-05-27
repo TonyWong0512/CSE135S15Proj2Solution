@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import models.CategoryWithCount;
+
 public class CategoriesHelper {
 
     public static List<CategoryWithCount> listCategories() {
